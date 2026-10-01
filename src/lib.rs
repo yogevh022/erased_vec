@@ -1,5 +1,7 @@
+type VecSized = [u8; size_of::<Vec<u8>>()];
+
 pub struct ErasedVec {
-    header: [usize; 3],
+    header: VecSized,
     clear_fn: fn(&mut Self),
     drop_fn: fn(&mut Self),
 }
@@ -14,11 +16,11 @@ impl ErasedVec {
     }
 
     pub fn get<T>(&self) -> &Vec<T> {
-        unsafe { &*(&self.header as *const [usize; 3] as *const Vec<T>) }
+        unsafe { &*(&self.header as *const VecSized as *const Vec<T>) }
     }
 
     pub fn get_mut<T>(&mut self) -> &mut Vec<T> {
-        unsafe { &mut *(&mut self.header as *mut [usize; 3] as *mut Vec<T>) }
+        unsafe { &mut *(&mut self.header as *mut VecSized as *mut Vec<T>) }
     }
 
     pub fn clear(&mut self) {
