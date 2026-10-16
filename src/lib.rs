@@ -15,6 +15,10 @@ impl ErasedVec {
         }
     }
 
+    pub fn new<T>() -> Self {
+        Self::from(Vec::<T>::new())
+    }
+
     pub fn get<T>(&self) -> &Vec<T> {
         unsafe { &*(&self.header as *const VecSized as *const Vec<T>) }
     }
